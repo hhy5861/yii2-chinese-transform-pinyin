@@ -8,19 +8,21 @@
 
 namespace iit;
 
+use yii\base\Component;
 
-class ChineseTransformPinyin
+class ChineseTransformPinyin extends Component
 {
     //utf-8中国汉字集合
     private $ChineseCharacters;
     //编码
     private $charset = 'utf-8';
 
-    public function __construct()
+    public function __construct($config = [])
     {
         if (empty($this->ChineseCharacters)) {
             $this->ChineseCharacters = file_get_contents(__FILE__ . 'ChineseCharacters.dat');
         }
+        parent::__construct($config);
     }
 
     /*
@@ -29,7 +31,7 @@ class ChineseTransformPinyin
     * param $delimiter  String   转换之后拼音之间分隔符
     * param $outside_ignore  Boolean     是否忽略非汉字内容
     */
-    public function TransformWithTone($input_char, $delimiter = ' ', $outside_ignore = false)
+    public function transformWithTone($input_char, $delimiter = ' ', $outside_ignore = false)
     {
         $input_len = mb_strlen($input_char, $this->charset);
         $output_char = '';
@@ -50,9 +52,9 @@ class ChineseTransformPinyin
     * param $delimiter  String   转换之后拼音之间分隔符
     * param $outside_ignore  Boolean     是否忽略非汉字内容
     */
-    public function TransformWithoutTone($input_char, $delimiter = '', $outside_ignore = true)
+    public function transformWithoutTone($input_char, $delimiter = '', $outside_ignore = true)
     {
-        $char_with_tone = $this->TransformWithTone($input_char, $delimiter, $outside_ignore);
+        $char_with_tone = $this->transformWithTone($input_char, $delimiter, $outside_ignore);
         $char_without_tone = str_replace(array('ā', 'á', 'ǎ', 'à', 'ō', 'ó', 'ǒ', 'ò', 'ē', 'é', 'ě', 'è', 'ī', 'í', 'ǐ', 'ì', 'ū', 'ú', 'ǔ', 'ù', 'ǖ', 'ǘ', 'ǚ', 'ǜ', 'ü'),
             array('a', 'a', 'a', 'a', 'o', 'o', 'o', 'o', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'u', 'u', 'u', 'u', 'v', 'v', 'v', 'v', 'v')
             , $char_with_tone);
@@ -65,9 +67,9 @@ class ChineseTransformPinyin
     * param $input_char String  需要转换的汉字
     * param $delimiter  String   转换之后拼音之间分隔符
     */
-    public function TransformUcWords($input_char, $delimiter = '')
+    public function transformUcWords($input_char, $delimiter = '')
     {
-        $char_without_tone = ucwords($this->TransformWithoutTone($input_char, ' ', true));
+        $char_without_tone = ucwords($this->transformWithoutTone($input_char, ' ', true));
         $uc_words = preg_replace('/[^A-Z]/', '', $char_without_tone);
         if (!empty($delimiter)) {
             $uc_words = implode($delimiter, str_split($uc_words));
