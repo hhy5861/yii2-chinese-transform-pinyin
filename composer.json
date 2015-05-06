@@ -1,0 +1,26 @@
+{
+  "name": "iit/yii2-chinese-transform-pinyin",
+  "description": "yii2-chinese-transform-pinyin",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "ilovintit",
+      "email": "ilovintit@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "iit\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.0.x-dev"
+    }
+  }
+}
+
